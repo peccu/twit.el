@@ -1,5 +1,5 @@
 ;;; Twit.el --- interface with twitter.com
-(defvar twit-version-number "0.3.11")
+(defvar twit-version-number "0.3.12")
 ;; Copyright (c) 2007 Theron Tlax
 ;;           (c) 2008-2009 Jonathan Arkell
 ;;           (c) 2010 Dave Kerschner (docgnome)
@@ -325,6 +325,7 @@
 ;;            to use the new style, a la TweetDeck
 ;; - 0.3.11 - Migrated to the versioned api at api.twitter.com/1 (docgnome)
 ;;            the api at twitter.com is deprecated
+;; - 0.3.12 - Remove 'reply_to' from `twit-post-retweet'. (peccu)
 ;;; TODO:
 ;; - remember style buffer posting.
 
@@ -1906,14 +1907,13 @@ tweet with \".@\" or some other filler character."
         (twit-post-status (format twit-retweet-file parent-id) 
                           (twit-get-text-property 'twit-message)))
   (let* ((reply-to (twit-get-text-property 'twit-user))
-         (parent-id (twit-get-text-property 'twit-id))
          (retweet-text (twit-get-text-property 'twit-message))
          (post (twit-query-for-post
                 (concat "Retweeting " reply-to)
                 (concat "RT @" reply-to ": " retweet-text " || "))))
     (if (> (length post) 140)
         (error twit-too-long-msg)
-      (twit-post-status twit-update-url post parent-id)))))
+      (twit-post-status twit-update-url post)))))
 
 ;;* post url
 ;;  Prompts for a URL, then compresses it and starts a tweet with the shortened URL in the body
