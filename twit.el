@@ -326,6 +326,7 @@
 ;; - 0.3.11 - Migrated to the versioned api at api.twitter.com/1 (docgnome)
 ;;            the api at twitter.com is deprecated
 ;; - 0.3.12 - Remove 'reply_to' from `twit-post-retweet'. (peccu)
+;;            now you can select enable/disable of `fill-region' tweets
 ;;; TODO:
 ;; - remember style buffer posting.
 
@@ -493,6 +494,11 @@ all elisp packages."
 
 (defcustom twit-show-user-images nil
    "Show user images beside each users tweet."
+   :type 'boolean
+   :group 'twit)
+
+(defcustom twit-fill-tweets nil
+   "Apply `fill-region' to tweets."
    :type 'boolean
    :group 'twit)
 
@@ -1468,7 +1474,8 @@ TIMES-THROUGH is an integer representing the number of times a tweet has been
               (let ((fill-column (- (window-width twit-window) 2)))
                 (insert "\t")
                 (insert message)
-                (fill-region (point-min) (point-max))
+                (when twit-fill-tweets
+		  (fill-region (point-min) (point-max)))
                 (buffer-substring 2 (point-max))))))
       (twit-insert-with-overlay-attributes (twit-keymap-and-fontify-message message)
                                            '((face . "twit-message-face"))
