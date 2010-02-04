@@ -1406,19 +1406,19 @@ TIMES-THROUGH is an integer representing the number of times a tweet has been
   displayed, for zebra-tabling."
   (let* ((tweet-id (xml-first-childs-value tweet 'id))
          (retweet (xml-first-child tweet 'retweeted_status))
-         (retweeted-by 
+         (retweeted-by
           (if retweet
               (or (xml-first-child tweet 'user) (xml-first-child tweet 'sender))))
          (retweeted-by-user-id
-          (if retweet 
+          (if retweet
               (or (xml-first-childs-value retweeted-by 'screen_name) "??")))
          (retweeted-by-user-img
           (if (and retweet twit-show-user-images)
-              (twit-get-user-image (xml-first-childs-value retweeted-by 'profile_image_url) 
+              (twit-get-user-image (xml-first-childs-value retweeted-by 'profile_image_url)
                                    retweeted-by-user-id)
             nil))
 
-         (tweet 
+         (tweet
           (if retweet
               retweet
             tweet))
@@ -1475,7 +1475,7 @@ TIMES-THROUGH is an integer representing the number of times a tweet has been
                 (insert "\t")
                 (insert message)
                 (when twit-fill-tweets
-		  (fill-region (point-min) (point-max)))
+                  (fill-region (point-min) (point-max)))
                 (buffer-substring 2 (point-max))))))
       (twit-insert-with-overlay-attributes (twit-keymap-and-fontify-message message)
                                            '((face . "twit-message-face"))
@@ -1911,7 +1911,7 @@ tweet with \".@\" or some other filler character."
   (interactive)
   (if (y-or-n-p "Would you like to use the new style retweet? ")
       (let ((parent-id (twit-get-text-property 'twit-id)))
-        (twit-post-status (format twit-retweet-file parent-id) 
+        (twit-post-status (format twit-retweet-file parent-id)
                           (twit-get-text-property 'twit-message)))
   (let* ((reply-to (twit-get-text-property 'twit-user))
          (retweet-text (twit-get-text-property 'twit-message))
