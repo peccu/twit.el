@@ -1,5 +1,5 @@
 ;;; Twit.el --- interface with twitter.com
-(defvar twit-version-number "0.3.12")
+(defvar twit-version-number "0.3.13")
 ;; Copyright (c) 2007 Theron Tlax
 ;;           (c) 2008-2009 Jonathan Arkell
 ;;           (c) 2010 Dave Kerschner (docgnome)
@@ -328,6 +328,7 @@
 ;; - 0.3.12 - Remove 'reply_to' from `twit-post-retweet'. (peccu)
 ;;            - now you can select enable/disable of `fill-region' tweets
 ;;            - add keybind "F" for `twit-show-favorites-tweets'
+;; - 0.3.13 - show messages when get timeline or get users for `twit-direct'
 ;;; TODO:
 ;; - remember style buffer posting.
 
@@ -1804,7 +1805,9 @@ at the end in parens.
 
 REQ is an optional requirement.  If its true, then the friend must exist in
 the friends cache."
-  (let* ((cur-author (twit-get-text-property 'twit-user)))
+  (let* ((cur-author))
+    (message "Accessing Twitter now...")
+    (setq cur-author (twit-get-text-property 'twit-user))
     (completing-read prompt (twit-get-friends t) nil req nil nil cur-author)))
 
 
@@ -2158,8 +2161,10 @@ Patch version from Ben Atkin."
    (with-twit-buffer "*Twit-recent*"
      (twit-write-title "Recent Tweets (Page %s) [%s]\n"
                        page (format-time-string "%c"))
+     (message "Accessing Twitter now...")
      (twit-write-recent-tweets
-      (twit-parse-xml (format twit-home-timeline-file page) "GET")))))
+      (twit-parse-xml (format twit-home-timeline-file page) "GET"))
+     (message "Updated!"))))
 
 
 ;;* interactive nav
