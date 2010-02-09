@@ -828,7 +828,7 @@ AS WELL.  Otherwise your primary login credentials may get wacked."
 ;; list methods
 ;; Creates a new list
 (defconst twit-list-create-url
-  (concat twit-base-url "/user/lists.xml")
+  (concat twit-base-url "/%s/lists.xml") ;your screen name
 "* HTTP Method(s):POST
 * Parameters:
   - name.  Required.  The name of the list you are creating.
@@ -836,7 +836,7 @@ AS WELL.  Otherwise your primary login credentials may get wacked."
   - description.  Optional.  The description of the list you are creating.")
 ;; Updates the specified list.
 (defconst twit-list-updates-url
-  (concat twit-base-url "/user/lists/id.xml")
+  (concat twit-base-url "/%s/lists/%s.xml") ;your screen name,list name
 "* HTTP Method(s):POST, PUT
 * Parameters:
   - name.  Optional. What you'd like to change the lists name to.
@@ -844,7 +844,7 @@ AS WELL.  Otherwise your primary login credentials may get wacked."
   - description.  Optional.  What you'd like to change the list description to.")
 ;; List the lists of the specified user. Private lists will be included if the authenticated users is the same as the user who'se lists are being returned.
 (defconst twit-list-index-url
-  (concat twit-base-url "/user/lists.xml")
+  (concat twit-base-url "/%s/lists.xml") ;screen name
 "* HTTP Method(s):GET
 * Parameters:
   - cursor. Optional. Breaks the results into pages. A single page contains 20 lists. Provide a value of -1 to begin paging. Provide values as returned to in the response body's next_cursor and previous_cursor attributes to page back and forth in the list.
@@ -852,19 +852,19 @@ AS WELL.  Otherwise your primary login credentials may get wacked."
     - Example: http://api.twitter.com/1/twitterapidocs/lists.xml?cursor=-1300794057949944903")
 ;; Show the specified list. Private lists will only be shown if the authenticated user owns the specified list.
 (defconst twit-list-show-url
-  (concat twit-base-url "/user/lists/id.xml")
+  (concat twit-base-url "/%s/lists/%s.xml") ;screen name,list name
 "* HTTP Method(s):GET
 * Parameters:
   - id.  Required. The id or slug of the list.")
 ;; Deletes the specified list. Must be owned by the authenticated user.
 (defconst twit-list-destroy-url
-  (concat twit-base-url "/user/lists/id.xml")
+  (concat twit-base-url "/%s/lists/%s.xml") ;your screen name,list name
 "* HTTP Method(s):DELETE (clients who can not issue DELETE requests can POST with the added parameter _method=DELETE)
 * Parameters:
   - id.  Required. The id or slug of the list.")
 ;; Show tweet timeline for members of the specified list.
 (defconst twit-list-statuses-url
-  (concat twit-base-url "/user/lists/list_id/statuses.xml")
+  (concat twit-base-url "/%d/lists/%d/statuses.xml?%s") ;screen name,list name,options
 "* HTTP Method(s):GET
 * Parameters:
   - since_id.  Optional.  Returns only statuses with an ID greater than (that is, more recent than) the specified ID.
@@ -877,7 +877,7 @@ AS WELL.  Otherwise your primary login credentials may get wacked."
     - Example: http://api.twitter.com/1/twitterapi/lists/team/statuses.xml?page=3")
 ;; List the lists the specified user has been added to.
 (defconst twit-list-memberships-url
-  (concat twit-base-url "/user/lists/memberships.xml")
+  (concat twit-base-url "/%s/lists/memberships.xml") ;screen name
 "* HTTP Method(s):GET
 * Parameters:
   - cursor. Optional. Breaks the results into pages. A single page contains 20 lists. Provide a value of -1 to begin paging. Provide values as returned to in the response body's next_cursor and previous_cursor attributes to page back and forth in the list.
@@ -885,7 +885,7 @@ Example: http://api.twitter.com/1/twitterapi/lists/memberships.xml?cursor=-1
 Example: http://api.twitter.com/1/twitterapi/lists/memberships.xml?cursor=-1300794057949944903")
 ;; List the lists the specified user follows.
 (defconst twit-list-subscriptions-url
-  (concat twit-base-url "/user/lists/subscriptions.xml")
+  (concat twit-base-url "/%s/lists/subscriptions.xml") ;screen name
 "* HTTP Method(s):GET
 * Parameters:
   - cursor. Optional. Breaks the results into pages. A single page contains 20 lists. Provide a value of -1 to begin paging. Provide values as returned to in the response body's next_cursor and previous_cursor attributes to page back and forth in the list.
@@ -897,7 +897,7 @@ Example: http://api.twitter.com/1/twitterapi/lists/memberships.xml?cursor=-13007
 ;; (POST)Add a member to a list. The authenticated user must own the list to be able to add members to it. Lists are limited to having 500 members.
 ;; (DELETE)Removes the specified member from the list. The authenticated user must be the list's owner to remove members from the list.
 (defconst twit-list-members-url
-  (concat twit-base-url "/user/list_id/members.xml")
+  (concat twit-base-url "/%s/%s/members.xml") ;screen name,list name
 "* HTTP Method(s):GET
 * Parameters:
   - list_id.  Required. The id or slug of the list.
@@ -914,7 +914,7 @@ Example: http://api.twitter.com/1/twitterapi/lists/memberships.xml?cursor=-13007
   - id. Required. The id of the member you wish to remove from the list.")
 ;; Check if a user is a member of the specified list.
 (defconst twit-list-check-members-url
-  (concat twit-base-url "/user/list_id/members/id.xml")
+  (concat twit-base-url "/%s/%s/members/%s.xml") ;screen name,list name,userID
 "* HTTP Method(s):GET
 * Parameters:
   - list_id.  Required. The id or slug of the list.
@@ -925,7 +925,7 @@ Example: http://api.twitter.com/1/twitterapi/lists/memberships.xml?cursor=-13007
 ;; (POST)Make the authenticated user follow the specified list.
 ;; (DELETE)Unsubscribes the authenticated user form the specified list.
 (defconst twit-list-subscribers-url
-  (concat twit-base-url "/user/list_id/subscribers.xml")
+  (concat twit-base-url "/%s/%s/subscribers.xml") ;screen name,list name
 "* HTTP Method(s):GET
 * Parameters:
   - list_id.  Required. The id or slug of the list.
@@ -941,7 +941,7 @@ Example: http://api.twitter.com/1/twitterapi/lists/memberships.xml?cursor=-13007
   - list_id.  Required. The id or slug of the list.")
 ;; Check if the specified user is a subscriber of the specified list.
 (defconst twit-list-check-subscribers-url
-  (concat twit-base-url "/user/list_id/subscribers/:id.xml")
+  (concat twit-base-url "/%s/%s/subscribers/%s.xml") ;screen name,list name,userID
 "* HTTP Method(s):GET
 * Parameters:
   - user.  Required.  The ID or screen name of the list's owner
